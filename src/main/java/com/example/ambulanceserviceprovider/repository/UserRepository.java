@@ -8,10 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface UserRepository extends JpaRepository <User, Long> {
-    boolean existsByUserEmail (String userEmail);
-    User findByUserEmail (String userEmail);
+    boolean existsByEmail(String userEmail);
+    User findByEmail(String userEmail);
     List<User> findByUserTypeAndAvailabilityStatus (UserType userType, AvailabilityStatus availabilityStatus);
 //    List<User> findByFirstNameAndLastNameAllIgnoreCase(String firstName, String lastName);
     List<User> findByFirstNameIgnoreCaseContainingOrLastNameIgnoreCaseContaining (String firstName, String lastName);
-
+    User findByVerificationToken(String verificationToken);
 }

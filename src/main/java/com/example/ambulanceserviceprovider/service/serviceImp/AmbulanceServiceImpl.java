@@ -11,17 +11,13 @@ import com.example.ambulanceserviceprovider.repository.AmbulanceRepository;
 import com.example.ambulanceserviceprovider.repository.UserRepository;
 import com.example.ambulanceserviceprovider.service.AmbulanceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -144,7 +140,7 @@ public class AmbulanceServiceImpl implements AmbulanceService {
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User user = userRepository.findByUserEmail(email);
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new CustomException("User not found");
         }

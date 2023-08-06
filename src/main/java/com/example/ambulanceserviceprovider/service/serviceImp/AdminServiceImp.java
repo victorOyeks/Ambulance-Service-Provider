@@ -60,8 +60,8 @@ public class AdminServiceImp implements AdminService {
     }
 
     private String performInvitation(String email, String note, Enum<?> type, boolean isForOrganization) {
-        boolean existingUser = userRepository.existsByUserEmail(email);
-        boolean existingOrg = organisationRepository.existsByOrgEmail(email);
+        boolean existingUser = userRepository.existsByEmail(email);
+        boolean existingOrg = organisationRepository.existsByEmail(email);
 
         if (existingUser || existingOrg) {
             throw new CustomException("User with " + email + " already exists");
@@ -73,7 +73,7 @@ public class AdminServiceImp implements AdminService {
 
         if (!isForOrganization) {
             User user = new User();
-            user.setUserEmail(email);
+            user.setEmail(email);
             user.setEnabled(false);
             user.setUserType((UserType) type);
             user.setLocked(false);
@@ -81,20 +81,21 @@ public class AdminServiceImp implements AdminService {
             userRepository.save(user);
         } else {
             Organisation organisation = new Organisation();
-            organisation.setOrgEmail(email);
+            organisation.setEmail(email);
             organisation.setLocked(false);
+            organisation.setEnabled(false);
             organisation.setOrganisationType((OrganisationType) type);
             organisationRepository.save(organisation);
         }
 
         String signupToken = generateSignupToken();
 
-        String invitationLink = "http://localhost:9191/api/auth/vendor-signup?email=" + URLEncoder.encode(email, StandardCharsets.UTF_8) + "&token=" + signupToken;
+        String invitationLink = "http://localhost:9191/api/auth/verify?email=" + URLEncoder.encode(email, StandardCharsets.UTF_8) + "&token=" + signupToken;
         String subject = "Invitation to Sign Up";
         String messageBody = "Dear User,\n\nYou have been invited to sign up on our platform. Please click the link below to complete your registration:\n\n" + invitationLink + "\n\nNote from the admin: " + note;
         EmailDetails emailDetails = new EmailDetails(email, subject, messageBody);
 
-//        emailService.sendEmail(emailDetails);
+        emailService.sendEmail(emailDetails);
 
         return type.toString() + " onboarded successfully. Email sent to " + type.toString() + " to complete registration";
     }
@@ -115,6 +116,7 @@ public class AdminServiceImp implements AdminService {
                 .availabilityStatus(ambulance.getAvailabilityStatus())
                 .build();
     }
+
 
     private boolean isAllowedType(Enum<?> type, boolean isForOrganization) {
         if (isForOrganization) {
@@ -170,7 +172,7 @@ public class AdminServiceImp implements AdminService {
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        User user = userRepository.findByUserEmail(email);
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new CustomException("User not found");
         }

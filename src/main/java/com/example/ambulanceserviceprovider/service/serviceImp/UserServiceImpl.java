@@ -1,6 +1,7 @@
 package com.example.ambulanceserviceprovider.service.serviceImp;
 
 import com.example.ambulanceserviceprovider.constant.UserType;
+import com.example.ambulanceserviceprovider.dto.request.EmailDetails;
 import com.example.ambulanceserviceprovider.dto.request.LoginRequest;
 import com.example.ambulanceserviceprovider.dto.request.SignupRequest;
 import com.example.ambulanceserviceprovider.dto.request.UserDto;
@@ -13,6 +14,7 @@ import com.example.ambulanceserviceprovider.exceptions.CustomException;
 import com.example.ambulanceserviceprovider.repository.OrganisationRepository;
 import com.example.ambulanceserviceprovider.repository.UserRepository;
 import com.example.ambulanceserviceprovider.security.JwtService;
+import com.example.ambulanceserviceprovider.service.EmailService;
 import com.example.ambulanceserviceprovider.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,8 +24,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -36,6 +41,7 @@ public class UserServiceImpl implements UserService {
     private final OrganisationRepository organisationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final EmailService emailService;
 
     public SignupResponse signup(SignupRequest signupRequest) {
         String userEmail = signupRequest.getUserEmail();
@@ -44,12 +50,12 @@ public class UserServiceImpl implements UserService {
             throw new CustomException("Invalid email format");
         }
 
-        if (organisationRepository.existsByOrgEmail(userEmail)){
+        if (organisationRepository.existsByEmail(userEmail)){
             throw new CustomException("Organisation with " + userEmail + " already exist");
         }
 
-        if (userRepository.existsByUserEmail(userEmail)) {
-            User existingUser = userRepository.findByUserEmail(userEmail);
+        if (userRepository.existsByEmail(userEmail)) {
+            User existingUser = userRepository.findByEmail(userEmail);
 
             if (existingUser.getPassword() != null) {
                 throw new CustomException("User with " + userEmail + " already exist.");
@@ -59,14 +65,14 @@ public class UserServiceImpl implements UserService {
             existingUser.setFirstName(signupRequest.getFirstName());
             existingUser.setLastName(signupRequest.getLastName());
 //            existingUser.setUserType(existingUser.getUserType());
-            existingUser.setEnabled(true);
+            existingUser.setEnabled(false);
             existingUser.setLocked(false);
 
             userRepository.save(existingUser);
 
             return SignupResponse.builder()
                     .userId(existingUser.getUserId())
-                    .email(existingUser.getUserEmail())
+                    .email(existingUser.getEmail())
                     .userType(existingUser.getUserType())
                     .build();
         } else {
@@ -83,7 +89,7 @@ public class UserServiceImpl implements UserService {
             String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
 
             User user = new User();
-            user.setUserEmail(signupRequest.getUserEmail());
+            user.setEmail(signupRequest.getUserEmail());
             user.setFirstName(signupRequest.getFirstName());
             user.setLastName(signupRequest.getLastName());
             user.setPassword(encodedPassword);
@@ -94,19 +100,34 @@ public class UserServiceImpl implements UserService {
             createNotification(user, "Hello " + user.getFirstName() + "! Welcome onboard!");
             userRepository.save(user);
 
+            String signupToken = generateSignupToken();
+
+            String invitationLink = "http://localhost:9191/api/auth/verify?email=" + URLEncoder.encode(signupRequest.getUserEmail(), StandardCharsets.UTF_8) + "&token=" + signupToken;
+            String subject = "Account Validation!!!";
+            String messageBody = "Dear User,\n\nThank you for signing up on the platform. Please click the link below to complete your registration:\n\n" + invitationLink;
+            EmailDetails emailDetails = new EmailDetails(signupRequest.getUserEmail(), subject, messageBody);
+
+            emailService.sendEmail(emailDetails);
+
+
             return SignupResponse.builder()
                     .userId(user.getUserId())
-                    .email(user.getUserEmail())
+                    .email(user.getEmail())
                     .userType(user.getUserType())
+                    .message("Sign up was successful. Proceed to your email for verification!!!")
                     .build();
         }
+    }
+
+    private String generateSignupToken() {
+        return UUID.randomUUID().toString();
     }
 
     @Override
     public LoginResponse authenticate(LoginRequest loginRequest) {
         String email = loginRequest.getEmail();
-        User user = userRepository.findByUserEmail(email);
-        Organisation organisation = organisationRepository.findByOrgEmail(email);
+        User user = userRepository.findByEmail(email);
+        Organisation organisation = organisationRepository.findByEmail(email);
 
         if (user == null && organisation == null) {
             throw new CustomException ("User with " + email + " does not exist");

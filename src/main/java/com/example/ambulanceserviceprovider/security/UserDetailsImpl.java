@@ -55,10 +55,10 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public String getUsername() {
         if (user != null) {
-            return user.getUserEmail();
+            return user.getEmail();
         }
         if (organisation != null) {
-            return organisation.getOrgEmail();
+            return organisation.getEmail();
         }
         return null;
     }

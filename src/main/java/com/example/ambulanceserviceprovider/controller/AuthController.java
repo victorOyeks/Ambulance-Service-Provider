@@ -6,6 +6,7 @@ import com.example.ambulanceserviceprovider.dto.request.UserDto;
 import com.example.ambulanceserviceprovider.dto.response.ApiResponse;
 import com.example.ambulanceserviceprovider.dto.response.LoginResponse;
 import com.example.ambulanceserviceprovider.dto.response.SignupResponse;
+import com.example.ambulanceserviceprovider.service.AuthService;
 import com.example.ambulanceserviceprovider.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,12 +20,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final AuthService authService;
     private final UserService userService;
 
     @PostMapping("sign-up")
     public ResponseEntity<ApiResponse<SignupResponse>> signup (@RequestBody SignupRequest signupRequest) {
         ApiResponse<SignupResponse> apiResponse = new ApiResponse<>(userService.signup(signupRequest));
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+    }
+
+    @GetMapping("verify")
+    public ResponseEntity<ApiResponse<String>> verifyAccount (@RequestParam("token") String verificationToke) {
+        ApiResponse<String> apiResponse = new ApiResponse<>(authService.verifyAccount(verificationToke));
+        return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @PostMapping("authenticate")

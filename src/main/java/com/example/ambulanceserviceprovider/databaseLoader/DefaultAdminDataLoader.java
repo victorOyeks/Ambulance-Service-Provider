@@ -2,7 +2,6 @@ package com.example.ambulanceserviceprovider.databaseLoader;
 
 import com.example.ambulanceserviceprovider.constant.UserType;
 import com.example.ambulanceserviceprovider.entities.User;
-import com.example.ambulanceserviceprovider.exceptions.CustomException;
 import com.example.ambulanceserviceprovider.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -18,12 +17,12 @@ public class DefaultAdminDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (userRepository.existsByUserEmail("admin@asp.com")) {
+        if (userRepository.existsByEmail("admin@asp.com")) {
             return;
         }
         String encodedPassword = passwordEncoder.encode("password1");
         User admin = User.builder()
-                .userEmail("admin@asp.com")
+                .email("admin@asp.com")
                 .userType(UserType.ADMIN)
                 .password(encodedPassword)
                 .enabled(true)

@@ -25,8 +25,8 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> {
-            User user = userRepository.findByUserEmail(username);
-            Organisation organisation = organisationRepository.findByOrgEmail(username);
+            User user = userRepository.findByEmail(username);
+            Organisation organisation = organisationRepository.findByEmail(username);
             return new UserDetailsImpl(user, organisation);
         };
     }

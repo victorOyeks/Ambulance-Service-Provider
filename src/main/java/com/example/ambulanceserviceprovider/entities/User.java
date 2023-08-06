@@ -4,6 +4,8 @@ import com.example.ambulanceserviceprovider.constant.AvailabilityStatus;
 import com.example.ambulanceserviceprovider.constant.UserType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-    private String userEmail;
+    private String email;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -28,8 +30,12 @@ public class User {
     private UserType userType;
     private Boolean enabled;
     private Boolean locked;
+    private String verificationToken;
     private AvailabilityStatus availabilityStatus;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
