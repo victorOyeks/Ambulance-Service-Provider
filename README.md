@@ -75,31 +75,31 @@ Contributions to the Ambulance Service Management System project are welcome. To
 
 
 ### Unified Modeling Language (UML)
-![sign-up](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/ASP UML)
+![sign-up](src%2Fmain%2Fresources%2Fimages%2FASP UML)
 
 ### User sign up and registration
-![sign-up](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/Screenshot 2023-08-07 at 13.34.29.png)
+![sign-up](src%2Fmain%2Fresources%2Fimages%2FScreenshot 2023-08-07 at 13.34.29.png)
 
 ### Email Verification
-![Email Verification](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_5.png)
+![Email Verification](src%2Fmain%2Fresources%2Fimages%2Fimg_5.png)
 
 ### User authentication
-![authentication](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img.png)
+![authentication](src%2Fmain%2Fresources%2Fimages%2Fimg.png)
 
 ### Admin inviting an Organization (e.g. Hospital and Healthcare)
 ![Organization Invitation](src%2Fmain%2Fresources%2Fimages%2Fimg_1.png)
 
 ### Admin inviting a staff (e.g. Doctor, Attendee and Driver)
-![Staff Invitation](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_3.png)
+![Staff Invitation](src%2Fmain%2Fresources%2Fimages%2Fimg_3.png)
 
 ### Admin adding an ambulance
-![Amin adding an Ambulance](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_2.png)
+![Amin adding an Ambulance](src%2Fmain%2Fresources%2Fimages%2Fimg_2.png)
 
 ### Individual Requesting for an Ambulance
-![Ambulance Request](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_4.png)
+![Ambulance Request](src%2Fmain%2Fresources%2Fimages%2Fimg_4.png)
 
 ### Username search
-![Username search](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_6.png)
+![Username search](src%2Fmain%2Fresources%2Fimages%2Fimg_6.png)
 
 
 ## Contact
