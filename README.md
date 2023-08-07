@@ -11,24 +11,27 @@ The Ambulance Service Management System is a web application that manages ambula
     - Passwords are properly validated, securely encrypted using the latest hashing algorithms.
     - Users can log in using their credentials and receive access and refresh tokens for secure authentication.
 
-2. **User Role-Based Access:**
+2. **Email Service:**
+    - Email service provider is enabled in the project. E.g. User email verification.
+
+3. **User Role-Based Access:**
     - Users are assigned specific roles (e.g., individual, traffic patrol, admin, doctor, employee, attendee, driver) to access relevant features.
     - Restricted user roles are managed by administrators.
 
-3. **User Search:**
+4. **User Search:**
     - Users can search for other users based on their first names, last names, or any partial name matches.
     - The system returns a list of users with their full names and user types.
 
-4. **Ambulance Service Request:**
+5. **Ambulance Service Request:**
     - Users with roles "individual" and "traffic patrol" can request ambulance services.
     - The system allocates available ambulances and staff members (drivers, doctors, attendees, employees) for the service.
     - Ambulances and staff availability status is updated accordingly.
 
-5. **Admin Functionality:**
+6. **Admin Functionality:**
     - Administrators can invite new users to the system, specifying their roles and user types.
     - Admins can manage ambulance staff availability and revert unavailable staff to the available status for new service requests.
 
-6. **Notification System:**
+7. **Notification System:**
     - The system generates notifications for users when they are assigned to ambulance service requests.
     - Users receive notifications in real-time to keep them informed.
 
@@ -74,7 +77,7 @@ Contributions to the Ambulance Service Management System project are welcome. To
 6. Wait for review and approval from project maintainers.
 
 
-### Unified Modeling Language (UML)
+### Entity Relationship Diagram (ERD)
 ![sign-up](src%2Fmain%2Fresources%2Fimages%2FASPUML)
 
 ### User sign up and registration
