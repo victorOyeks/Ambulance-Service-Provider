@@ -8,7 +8,7 @@ The Ambulance Service Management System is a web application that manages ambula
 
 1. **User Signup and Authentication:**
     - Users can sign up using their email, password and other details.
-    - Passwords are securely encrypted using the latest hashing algorithms.
+    - Passwords are properly validated, securely encrypted using the latest hashing algorithms.
     - Users can log in using their credentials and receive access and refresh tokens for secure authentication.
 
 2. **User Role-Based Access:**
@@ -40,6 +40,7 @@ The Ambulance Service Management System is a web application that manages ambula
 4. Ambulance Service Request: `POST /api/ambulance/request`
 5. Ambulance Service Revert Unavailable: `POST /api/ambulance/revert`
 6. User Signup: `POST /api/auth/sign-up`
+6. User email verification: `POST /api/auth/verify`
 7. User Login: `POST /api/auth/authenticate`
 8. Search Users: `GET /api/auth/search?name={partialName}`
 

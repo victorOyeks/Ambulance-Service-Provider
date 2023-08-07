@@ -20,7 +20,7 @@ public class DefaultAdminDataLoader implements CommandLineRunner {
         if (userRepository.existsByEmail("admin@asp.com")) {
             return;
         }
-        String encodedPassword = passwordEncoder.encode("password1");
+        String encodedPassword = passwordEncoder.encode("Password1@");
         User admin = User.builder()
                 .email("admin@asp.com")
                 .userType(UserType.ADMIN)

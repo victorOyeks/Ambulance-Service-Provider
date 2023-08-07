@@ -52,6 +52,10 @@ public class UserServiceImpl implements UserService {
             throw new CustomException("Organisation with " + userEmail + " already exist");
         }
 
+        if (!isPasswordValid(signupRequest.getPassword())) {
+            throw new CustomException("Password must contain at least 6 characters, a number, a character and a capital letter!!!");
+        }
+
         if (userRepository.existsByEmail(userEmail)) {
             User existingUser = userRepository.findByEmail(userEmail);
 
@@ -74,7 +78,6 @@ public class UserServiceImpl implements UserService {
                     .userType(existingUser.getUserType())
                     .build();
         } else {
-            // New user registration process
 
             if (isRestrictedUserType(signupRequest.getUserType())) {
                 throw new CustomException("Restricted UserType. UserType can only be signed up by the Admin");
@@ -134,7 +137,7 @@ public class UserServiceImpl implements UserService {
         }
         if (user != null) {
             if (!user.getEnabled()) {
-                throw new CustomException("User with " + email + " is not enabled");
+                throw new CustomException("Your email has not been verified!!!");
             }
             if(user.getLocked()) {
                 throw new CustomException("Your account has been locked. Contact Admin for support!");
@@ -209,6 +212,16 @@ public class UserServiceImpl implements UserService {
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    private boolean isPasswordValid(String password) {
+        if (password.length() < 6) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{6,}$");
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+
     }
 
     private void createNotification(User user, String message) {
