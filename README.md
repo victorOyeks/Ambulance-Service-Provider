@@ -73,6 +73,34 @@ Contributions to the Ambulance Service Management System project are welcome. To
 5. Create a pull request from your branch to the main repository's master branch.
 6. Wait for review and approval from project maintainers.
 
+
+### Description
+![Ambulance](https://imgur.com/gallery/FZduYrK)
+
+### Features
+![Features](url_to_image)
+
+### Endpoints
+![Endpoints](url_to_image)
+
+### Technologies Used
+![Technologies Used](url_to_image)
+
+### Setup Instructions
+![Setup Instructions](url_to_image)
+
+### Contributing
+![Contributing](url_to_image)
+
+### Contact
+![Contact](url_to_image)
+Replace url_to_image with the actual URLs of the images you want to include for each section. Make sure the URLs are accessible on the internet.
+
+
+
+
+
+
 ## Contact
 
 If you have any questions or need further assistance, please feel free to reach out to me at [bolaoyeks@gmail.com](mailto:bolaoyeks@gmail.com). I appreciate your interest and feedback!

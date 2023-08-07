@@ -6,8 +6,6 @@ import com.example.ambulanceserviceprovider.dto.request.UserDto;
 import com.example.ambulanceserviceprovider.dto.response.ApiResponse;
 import com.example.ambulanceserviceprovider.dto.response.LoginResponse;
 import com.example.ambulanceserviceprovider.dto.response.SignupResponse;
-import com.example.ambulanceserviceprovider.entities.User;
-import com.example.ambulanceserviceprovider.repository.UserRepository;
 import com.example.ambulanceserviceprovider.service.AuthService;
 import com.example.ambulanceserviceprovider.service.UserService;
 import lombok.RequiredArgsConstructor;
