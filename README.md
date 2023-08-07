@@ -74,31 +74,32 @@ Contributions to the Ambulance Service Management System project are welcome. To
 6. Wait for review and approval from project maintainers.
 
 
-### Description
-![Ambulance](https://imgur.com/gallery/FZduYrK)
+### Unified Modeling Language (UML)
+![sign-up](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/ASP UML)
 
-### Features
-![Features](url_to_image)
+### User sign up and registration
+![sign-up](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/Screenshot 2023-08-07 at 13.34.29.png)
 
-### Endpoints
-![Endpoints](url_to_image)
+### Email Verification
+![Email Verification](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_5.png)
 
-### Technologies Used
-![Technologies Used](url_to_image)
+### User authentication
+![authentication](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img.png)
 
-### Setup Instructions
-![Setup Instructions](url_to_image)
+### Admin inviting an Organization (e.g. Hospital and Healthcare)
+![Organization Invitation](src%2Fmain%2Fresources%2Fimages%2Fimg_1.png)
 
-### Contributing
-![Contributing](url_to_image)
+### Admin inviting a staff (e.g. Doctor, Attendee and Driver)
+![Staff Invitation](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_3.png)
 
-### Contact
-![Contact](url_to_image)
-Replace url_to_image with the actual URLs of the images you want to include for each section. Make sure the URLs are accessible on the internet.
+### Admin adding an ambulance
+![Amin adding an Ambulance](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_2.png)
 
+### Individual Requesting for an Ambulance
+![Ambulance Request](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_4.png)
 
-
-
+### Username search
+![Username search](/Users/Oyeks/IdeaProjects/Ambulance-Service-Provider/src/main/resources/images/img_6.png)
 
 
 ## Contact
