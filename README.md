@@ -78,7 +78,7 @@ Contributions to the Ambulance Service Management System project are welcome. To
 ![sign-up](src%2Fmain%2Fresources%2Fimages%2FASP UML)
 
 ### User sign up and registration
-![sign-up](src%2Fmain%2Fresources%2Fimages%2FScreenshot 20src%2Fmain%2Fresources%2Fimages%2Fimg_7.png)
+![sign-up](src%2Fmain%2Fresources%2Fimages%2Fimg_7.png)
 
 ### Email Verification
 ![Email Verification](src%2Fmain%2Fresources%2Fimages%2Fimg_5.png)
