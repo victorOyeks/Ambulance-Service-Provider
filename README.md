@@ -75,7 +75,7 @@ Contributions to the Ambulance Service Management System project are welcome. To
 
 
 ### Unified Modeling Language (UML)
-![sign-up](src%2Fmain%2Fresources%2Fimages%2FASP UML)
+![sign-up](src%2Fmain%2Fresources%2Fimages%2FASPUML)
 
 ### User sign up and registration
 ![sign-up](src%2Fmain%2Fresources%2Fimages%2Fimg_7.png)
