@@ -24,8 +24,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -65,7 +63,7 @@ public class UserServiceImpl implements UserService {
             existingUser.setFirstName(signupRequest.getFirstName());
             existingUser.setLastName(signupRequest.getLastName());
 //            existingUser.setUserType(existingUser.getUserType());
-            existingUser.setEnabled(false);
+            existingUser.setEnabled(true);
             existingUser.setLocked(false);
 
             userRepository.save(existingUser);
@@ -88,21 +86,23 @@ public class UserServiceImpl implements UserService {
 
             String encodedPassword = passwordEncoder.encode(signupRequest.getPassword());
 
+            String signupToken = generateSignupToken();
+
             User user = new User();
             user.setEmail(signupRequest.getUserEmail());
             user.setFirstName(signupRequest.getFirstName());
             user.setLastName(signupRequest.getLastName());
             user.setPassword(encodedPassword);
             user.setUserType(signupRequest.getUserType());
-            user.setEnabled(true);
+            user.setToken(signupToken);
+            user.setEnabled(false);
             user.setLocked(false);
 
             createNotification(user, "Hello " + user.getFirstName() + "! Welcome onboard!");
             userRepository.save(user);
 
-            String signupToken = generateSignupToken();
 
-            String invitationLink = "http://localhost:9191/api/auth/verify?email=" + URLEncoder.encode(signupRequest.getUserEmail(), StandardCharsets.UTF_8) + "&token=" + signupToken;
+            String invitationLink = "http://localhost:9000/api/auth/verify?token=" + signupToken;
             String subject = "Account Validation!!!";
             String messageBody = "Dear User,\n\nThank you for signing up on the platform. Please click the link below to complete your registration:\n\n" + invitationLink;
             EmailDetails emailDetails = new EmailDetails(signupRequest.getUserEmail(), subject, messageBody);

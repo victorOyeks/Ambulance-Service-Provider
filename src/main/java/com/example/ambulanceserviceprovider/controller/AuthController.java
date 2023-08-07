@@ -30,8 +30,8 @@ public class AuthController {
     }
 
     @GetMapping("verify")
-    public ResponseEntity<ApiResponse<String>> verifyAccount (@RequestParam("token") String verificationToke) {
-        ApiResponse<String> apiResponse = new ApiResponse<>(authService.verifyAccount(verificationToke));
+    public ResponseEntity<ApiResponse<String>> verifyAccount (@RequestParam("token") String token) {
+        ApiResponse<String> apiResponse = new ApiResponse<>(authService.verifyAccount(token));
         return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 

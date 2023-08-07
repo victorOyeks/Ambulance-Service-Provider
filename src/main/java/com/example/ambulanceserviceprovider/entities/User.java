@@ -30,7 +30,7 @@ public class User {
     private UserType userType;
     private Boolean enabled;
     private Boolean locked;
-    private String verificationToken;
+    private String token;
     private AvailabilityStatus availabilityStatus;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Notification> notifications = new ArrayList<>();

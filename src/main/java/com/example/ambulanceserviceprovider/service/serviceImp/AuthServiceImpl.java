@@ -18,11 +18,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String verifyAccount(String verificationToken) {
-        User user = userRepository.findByVerificationToken(verificationToken);
+        User user = userRepository.findByToken(verificationToken);
         Organisation organisation = organisationRepository.findByVerificationToken(verificationToken);
         if (user != null) {
             user.setEnabled(true);
-            user.setVerificationToken(null);
+            user.setToken(null);
             userRepository.save(user);
             return "Account verified successfully. Proceed to login.";
         } else if (organisation != null) {
