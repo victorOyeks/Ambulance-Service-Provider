@@ -21,17 +21,23 @@ The Ambulance Service Management System is a web application that manages ambula
 4. **User Search:**
     - Users can search for other users based on their first names, last names, or any partial name matches.
     - The system returns a list of users with their full names and user types.
-
-5. **Ambulance Service Request:**
+   
+5. **Forgot and Reset Password:**
+    - When users or organizations forget their password when trying to login, they can use the forget password route.
+    - And OTP is sent to the user's registered email address.
+    - The OTP is fetched, if it's correct, it allows for a change of password.
+    - Otherwise, it throws exception.
+   
+6. **Ambulance Service Request:**
     - Users with roles "individual" and "traffic patrol" can request ambulance services.
     - The system allocates available ambulances and staff members (drivers, doctors, attendees, employees) for the service.
     - Ambulances and staff availability status is updated accordingly.
 
-6. **Admin Functionality:**
+7. **Admin Functionality:**
     - Administrators can invite new users to the system, specifying their roles and user types.
     - Admins can manage ambulance staff availability and revert unavailable staff to the available status for new service requests.
 
-7. **Notification System:**
+8. **Notification System:**
     - The system generates notifications for users when they are assigned to ambulance service requests.
     - Users receive notifications in real-time to keep them informed.
 
@@ -43,9 +49,11 @@ The Ambulance Service Management System is a web application that manages ambula
 4. Ambulance Service Request: `POST /api/ambulance/request`
 5. Ambulance Service Revert Unavailable: `POST /api/ambulance/revert`
 6. User Signup: `POST /api/auth/sign-up`
-6. User email verification: `POST /api/auth/verify`
-7. User Login: `POST /api/auth/authenticate`
-8. Search Users: `GET /api/auth/search?name={partialName}`
+7. User email verification: `POST /api/auth/verify`
+8. User Login: `POST /api/auth/authenticate`
+9. Forgot Password: `POST /api/auth/forgot-password`
+10. Reset Password: `POST /api/auth/reset-password`
+11. Search Users: `GET /api/auth/search?name={name}`
 
 ## Technologies Used
 
@@ -53,7 +61,7 @@ The Ambulance Service Management System is a web application that manages ambula
 - Spring Boot
 - Spring Security
 - JWT (JSON Web Tokens) for authentication
-- Email service for Email verification
+- Google Mail Service Provider for Email verification
 - PostgreSQL (or any other preferred database)
 - Postman (for API testing)
 
