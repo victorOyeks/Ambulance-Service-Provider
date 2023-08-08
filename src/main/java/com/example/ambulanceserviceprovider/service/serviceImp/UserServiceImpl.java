@@ -1,10 +1,7 @@
 package com.example.ambulanceserviceprovider.service.serviceImp;
 
 import com.example.ambulanceserviceprovider.constant.UserType;
-import com.example.ambulanceserviceprovider.dto.request.EmailDetails;
-import com.example.ambulanceserviceprovider.dto.request.LoginRequest;
-import com.example.ambulanceserviceprovider.dto.request.SignupRequest;
-import com.example.ambulanceserviceprovider.dto.request.UserDto;
+import com.example.ambulanceserviceprovider.dto.request.*;
 import com.example.ambulanceserviceprovider.dto.response.LoginResponse;
 import com.example.ambulanceserviceprovider.dto.response.SignupResponse;
 import com.example.ambulanceserviceprovider.entities.Notification;
@@ -24,8 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -174,6 +173,99 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    public String changePassword(ChangePasswordRequest request) {
+        User existingUser = getAuthenticatedUser();
+
+        if (!passwordEncoder.matches(request.getOldPassword(), existingUser.getPassword())) {
+            throw new CustomException("Incorrect old password");
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
+            System.out.println("New password: " + request.getNewPassword());
+            System.out.println("Confirm password: " + request.getConfirmNewPassword());
+            throw new CustomException("New password and confirm password do not match");
+        }
+
+        String encodedPassword = passwordEncoder.encode(request.getNewPassword());
+        existingUser.setPassword(encodedPassword);
+
+        userRepository.save(existingUser);
+
+        return "Password changed successfully!!!";
+    }
+
+
+    @Override
+    public String forgotPassword(ResetEmail resetEmail) throws IOException {
+        String email = resetEmail.getEmail();
+
+        User user = userRepository.findByEmail(email);
+        Organisation organisation = organisationRepository.findByEmail(email);
+
+        if (user == null && organisation == null) {
+            throw new CustomException("User with " + email + " does not exist");
+        }
+
+        String resetToken = generateResetToken();
+
+        if (user != null) {
+            user.setToken(resetToken);
+            userRepository.save(user);
+        } else {
+            organisation.setVerificationToken(resetToken);
+            organisationRepository.save(organisation);
+        }
+        sendPasswordResetEmail(email, resetToken);
+
+        return "Password reset code has been sent to your email address!!!.";
+    }
+
+    public String resetPassword(ResetPasswordRequest resetPasswordRequest) {
+        String resetToken = resetPasswordRequest.getResetToken();
+        String newPassword = resetPasswordRequest.getNewPassword();
+        String confirmNewPassword = resetPasswordRequest.getConfirmPassword();
+
+        User user = userRepository.findByToken(resetToken);
+        Organisation organisation = organisationRepository.findByVerificationToken(resetToken);
+
+        if (user != null) {
+            if(!newPassword.equals(confirmNewPassword)) {
+                throw new CustomException("Password does not match");
+            }
+            String encodedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encodedPassword);
+            user.setToken(null);
+            userRepository.save(user);
+            return "User password reset successful.";
+        } else if (organisation != null) {
+            if(!newPassword.equals(confirmNewPassword)) {
+                throw new CustomException("Password does not match");
+            }
+            String encodedPassword = passwordEncoder.encode(newPassword);
+            organisation.setPassword(encodedPassword);
+            organisation.setVerificationToken(null);
+            organisationRepository.save(organisation);
+            return "Organisation password reset successful.";
+        }
+        else {
+            throw new CustomException("Invalid password reset token.");
+        }
+    }
+
+    private String generateResetToken() {
+        Random random = new Random();
+        int randomNumber = random.nextInt(1000000);
+        return String.format("%06d", randomNumber);
+    }
+
+
+    private void sendPasswordResetEmail(String recipient, String resetCode) throws IOException {
+        String subject = "Password Reset";
+        String messageBody = "Your password reset code is :" + resetCode;
+        EmailDetails emailDetails = new EmailDetails(recipient, subject, messageBody);
+        emailService.sendEmail(emailDetails);
+    }
+
     private String getFullName(User user) {
             return user.getFirstName() + " " + user.getLastName();
         }
@@ -231,5 +323,15 @@ public class UserServiceImpl implements UserService {
         notification.setCreatedAt(LocalDateTime.now());
         user.getNotifications().add(notification);
         userRepository.save(user);
+    }
+
+    private User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication.getName();
+        User user = userRepository.findByEmail(userEmail);
+        if (user == null) {
+            throw new CustomException("User not found");
+        }
+        return user;
     }
 }
