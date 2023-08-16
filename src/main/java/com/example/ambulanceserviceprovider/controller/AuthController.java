@@ -3,6 +3,7 @@ package com.example.ambulanceserviceprovider.controller;
 import com.example.ambulanceserviceprovider.dto.request.*;
 import com.example.ambulanceserviceprovider.dto.response.ApiResponse;
 import com.example.ambulanceserviceprovider.dto.response.LoginResponse;
+import com.example.ambulanceserviceprovider.dto.response.OrgRegistrationResponse;
 import com.example.ambulanceserviceprovider.dto.response.SignupResponse;
 import com.example.ambulanceserviceprovider.exceptions.CustomException;
 import com.example.ambulanceserviceprovider.service.AuthService;
@@ -23,10 +24,16 @@ public class AuthController {
     private final AuthService authService;
     private final UserService userService;
 
-    @PostMapping("sign-up")
+    @PostMapping("user-signup")
     public ResponseEntity<ApiResponse<SignupResponse>> signup (@RequestBody SignupRequest signupRequest) {
-        ApiResponse<SignupResponse> apiResponse = new ApiResponse<>(userService.signup(signupRequest));
+        ApiResponse<SignupResponse> apiResponse = new ApiResponse<>(authService.userSignup(signupRequest));
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
+    }
+
+    @PostMapping("org-signup")
+    public ResponseEntity<ApiResponse<OrgRegistrationResponse>> orgSignup (@RequestBody OrgRegistrationRequest request) throws IOException {
+        ApiResponse<OrgRegistrationResponse> apiResponse = new ApiResponse<>(authService.organizationSignup(request));
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @GetMapping("verify")
@@ -37,7 +44,7 @@ public class AuthController {
 
     @PostMapping("authenticate")
     public ResponseEntity<ApiResponse<LoginResponse>> loginUser(@RequestBody LoginRequest loginRequest) {
-        ApiResponse<LoginResponse> apiResponse = new ApiResponse<>(userService.authenticate(loginRequest));
+        ApiResponse<LoginResponse> apiResponse = new ApiResponse<>(authService.authenticate(loginRequest));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 

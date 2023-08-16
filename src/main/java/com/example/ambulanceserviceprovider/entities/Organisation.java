@@ -1,6 +1,7 @@
 package com.example.ambulanceserviceprovider.entities;
 
 import com.example.ambulanceserviceprovider.constant.OrganisationType;
+import com.example.ambulanceserviceprovider.geoLocation.GeoLocation;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -22,6 +23,8 @@ public class Organisation {
     private String email;
     private String orgName;
     private String orgAddress;
+    private String mapUrl;
+    private GeoLocation coordinates;
     private String password;
     private String phoneNumber;
     private Boolean enabled;

@@ -83,7 +83,7 @@ public class AdminServiceImp implements AdminService {
             Organisation organisation = new Organisation();
             organisation.setEmail(email);
             organisation.setLocked(false);
-            organisation.setEnabled(false);
+            organisation.setEnabled(true);
             organisation.setOrganisationType((OrganisationType) type);
             organisationRepository.save(organisation);
         }

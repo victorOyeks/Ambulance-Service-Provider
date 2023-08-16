@@ -11,33 +11,38 @@ The Ambulance Service Management System is a web application that manages ambula
     - Passwords are properly validated, securely encrypted using the latest hashing algorithms.
     - Users can log in using their credentials and receive access and refresh tokens for secure authentication.
 
-2. **Email Service:**
+2. **Organization Signup and Authentication:**
+    - Organizations can sign up using their email, password and other details as well.
+    - Passwords are properly validated, securely encrypted using the latest hashing algorithms.
+    - When organizations input their address, the address is fetched with Google API and returns a response of the actual address from Google map.
+
+3. **Email Service:**
     - Email service provider is enabled in the project. E.g. User email verification.
 
-3. **User Role-Based Access:**
+4. **User Role-Based Access:**
     - Users are assigned specific roles (e.g., individual, traffic patrol, admin, doctor, employee, attendee, driver) to access relevant features.
     - Restricted user roles are managed by administrators.
 
-4. **User Search:**
+5. **User Search:**
     - Users can search for other users based on their first names, last names, or any partial name matches.
     - The system returns a list of users with their full names and user types.
    
-5. **Forgot and Reset Password:**
+6. **Forgot and Reset Password:**
     - When users or organizations forget their password when trying to login, they can use the forget password route.
     - And OTP is sent to the user's registered email address.
     - The OTP is fetched, if it's correct, it allows for a change of password.
     - Otherwise, it throws exception.
    
-6. **Ambulance Service Request:**
+7. **Ambulance Service Request:**
     - Users with roles "individual" and "traffic patrol" can request ambulance services.
     - The system allocates available ambulances and staff members (drivers, doctors, attendees, employees) for the service.
     - Ambulances and staff availability status is updated accordingly.
 
-7. **Admin Functionality:**
+8. **Admin Functionality:**
     - Administrators can invite new users to the system, specifying their roles and user types.
     - Admins can manage ambulance staff availability and revert unavailable staff to the available status for new service requests.
 
-8. **Notification System:**
+9. **Notification System:**
     - The system generates notifications for users when they are assigned to ambulance service requests.
     - Users receive notifications in real-time to keep them informed.
 
@@ -48,12 +53,13 @@ The Ambulance Service Management System is a web application that manages ambula
 3. Admin Add Ambulance: `POST /api/admin/add-ambulance`
 4. Ambulance Service Request: `POST /api/ambulance/request`
 5. Ambulance Service Revert Unavailable: `POST /api/ambulance/revert`
-6. User Signup: `POST /api/auth/sign-up`
-7. User email verification: `POST /api/auth/verify`
-8. User Login: `POST /api/auth/authenticate`
-9. Forgot Password: `POST /api/auth/forgot-password`
-10. Reset Password: `POST /api/auth/reset-password`
-11. Search Users: `GET /api/auth/search?name={name}`
+6. User Signup: `POST /api/auth/user-signup`
+7. Organization Signup: `POST /api/auth/org-signup`
+8. User email verification: `POST /api/auth/verify`
+9. User Login: `POST /api/auth/authenticate`
+10. Forgot Password: `POST /api/auth/forgot-password`
+11. Reset Password: `POST /api/auth/reset-password`
+12. Search Users: `GET /api/auth/search?name={name}`
 
 ## Technologies Used
 
