@@ -138,7 +138,7 @@ public class AuthServiceImpl implements AuthService {
 
         boolean isExistingOrg = organisationRepository.existsByEmail(email);
         if (!isExistingOrg) {
-            throw new CustomException("Invalid Organization. Contact Admin!");
+            throw new CustomException("Contact Admin to get invited!!!");
         }
 
         boolean isExistingUser = userRepository.existsByEmail(email);
