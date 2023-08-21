@@ -159,6 +159,10 @@ public class AuthServiceImpl implements AuthService {
             throw new CustomException("Organization already exist with email");
         }
 
+        if ("Unknown Location".equals(actualLocation)) {
+            throw new CustomException("Location not found, please enter a valid location!!!");
+        }
+
 //        String verificationToken = generateToken();
         String encodedPassword = passwordEncoder.encode(password);
 
