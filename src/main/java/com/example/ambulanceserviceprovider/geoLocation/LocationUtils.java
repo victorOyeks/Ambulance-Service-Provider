@@ -1,5 +1,6 @@
 package com.example.ambulanceserviceprovider.geoLocation;
 
+import com.example.ambulanceserviceprovider.dto.request.AmbulanceRequest;
 import com.example.ambulanceserviceprovider.dto.request.OrgRegistrationRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -23,13 +24,14 @@ public class LocationUtils {
 
         return response.getBody();
     }
-    public static GeoResponse getGeoDetails(@RequestParam String businessAddress) {
+
+    public static GeoResponse getGeoDetails(@RequestParam AmbulanceRequest request) {
         UriComponents uri = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host("maps.googleapis.com")
                 .path("/maps/api/geocode/json")
                 .queryParam("key", API_KEY)
-                .queryParam("address", businessAddress)
+                .queryParam("address", request.getLocation())
                 .build();
         ResponseEntity<GeoResponse> response = new RestTemplate().getForEntity(uri.toUriString(), GeoResponse.class);
 

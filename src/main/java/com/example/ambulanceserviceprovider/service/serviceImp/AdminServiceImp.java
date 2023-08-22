@@ -25,6 +25,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +45,10 @@ public class AdminServiceImp implements AdminService {
         String email = invitationRequest.getEmail();
         String note = invitationRequest.getNote();
         boolean isForOrganization = false;
+
+        if(!isValidEmail(email)) {
+            throw new CustomException("Please enter a valid email address!!!");
+        }
 
         return performInvitation(email, note, invitationRequest.getUserType(), isForOrganization);
     }
@@ -177,5 +183,12 @@ public class AdminServiceImp implements AdminService {
             throw new CustomException("User not found");
         }
         return user;
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

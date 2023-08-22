@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 @Data
 public class AmbulanceServiceResponse {
     private String ambulancePlateNumber;
-    private String driverNames;
-    private String doctorNames;
-    private String attendeeNames;
-    private String employeeNames;
+    private String driverName;
+    private String doctorName;
+    private String attendeeName;
+    private String employeeName;
+    private String location;
+    private String mapUri;
     private String message;
 }

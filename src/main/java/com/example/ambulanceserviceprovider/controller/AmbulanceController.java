@@ -1,5 +1,6 @@
 package com.example.ambulanceserviceprovider.controller;
 
+import com.example.ambulanceserviceprovider.dto.request.AmbulanceRequest;
 import com.example.ambulanceserviceprovider.dto.request.ChangePasswordRequest;
 import com.example.ambulanceserviceprovider.dto.response.AmbulanceServiceResponse;
 import com.example.ambulanceserviceprovider.dto.response.ApiResponse;
@@ -20,8 +21,8 @@ public class AmbulanceController {
     private final UserService userService;
 
     @PostMapping("/request")
-    public ResponseEntity<ApiResponse<AmbulanceServiceResponse>> requestAmbulanceService() {
-        ApiResponse<AmbulanceServiceResponse> apiResponse = new ApiResponse<>(ambulanceService.requestAmbulanceService());
+    public ResponseEntity<ApiResponse<AmbulanceServiceResponse>> requestAmbulanceService(@RequestBody AmbulanceRequest request) {
+        ApiResponse<AmbulanceServiceResponse> apiResponse = new ApiResponse<>(ambulanceService.requestAmbulanceService(request));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 

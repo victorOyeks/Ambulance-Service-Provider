@@ -79,6 +79,7 @@ public class AuthServiceImpl implements AuthService {
                     .userId(existingUser.getUserId())
                     .email(existingUser.getEmail())
                     .userType(existingUser.getUserType())
+                    .message("Signup successful. Proceed to login!!!")
                     .build();
         } else {
 

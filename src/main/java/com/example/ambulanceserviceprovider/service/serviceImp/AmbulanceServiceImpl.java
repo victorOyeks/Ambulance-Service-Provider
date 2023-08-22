@@ -1,13 +1,20 @@
 package com.example.ambulanceserviceprovider.service.serviceImp;
 
 import com.example.ambulanceserviceprovider.constant.AvailabilityStatus;
+import com.example.ambulanceserviceprovider.constant.OrganisationType;
 import com.example.ambulanceserviceprovider.constant.UserType;
+import com.example.ambulanceserviceprovider.dto.request.AmbulanceRequest;
 import com.example.ambulanceserviceprovider.dto.response.AmbulanceServiceResponse;
 import com.example.ambulanceserviceprovider.entities.Ambulance;
 import com.example.ambulanceserviceprovider.entities.Notification;
+import com.example.ambulanceserviceprovider.entities.Organisation;
 import com.example.ambulanceserviceprovider.entities.User;
 import com.example.ambulanceserviceprovider.exceptions.CustomException;
+import com.example.ambulanceserviceprovider.geoLocation.GeoLocation;
+import com.example.ambulanceserviceprovider.geoLocation.GeoResponse;
+import com.example.ambulanceserviceprovider.geoLocation.LocationUtils;
 import com.example.ambulanceserviceprovider.repository.AmbulanceRepository;
+import com.example.ambulanceserviceprovider.repository.OrganisationRepository;
 import com.example.ambulanceserviceprovider.repository.UserRepository;
 import com.example.ambulanceserviceprovider.service.AmbulanceService;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +26,29 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
+import static com.example.ambulanceserviceprovider.geoLocation.LocationUtils.*;
+
 @Service
 @RequiredArgsConstructor
 public class AmbulanceServiceImpl implements AmbulanceService {
 
     private final AmbulanceRepository ambulanceRepository;
     private final UserRepository userRepository;
+    private final OrganisationRepository organisationRepository;
 
-    public AmbulanceServiceResponse requestAmbulanceService() {
+    public AmbulanceServiceResponse requestAmbulanceService(AmbulanceRequest request) {
+
+        GeoResponse geoDetails = getGeoDetails(request);
+        String actualLocation = extractActualLocation(geoDetails);
+        GeoLocation coordinates = extractGeoLocation(geoDetails);
+        String mapUri = LocationUtils.getMapUri(coordinates);
+
         User user = getAuthenticatedUser();
+        Organisation organisation = getAuthenticatedOrg();
         UserType userType = user.getUserType();
-        if (userType != UserType.INDIVIDUAL && userType != UserType.TRAFFIC_PATROL) {
-            throw new CustomException("Invalid user type. Only INDIVIDUAL and TRAFFIC_PATROL are allowed.");
+        OrganisationType organisationType = organisation.getOrganisationType();
+        if (userType != UserType.INDIVIDUAL && userType != UserType.TRAFFIC_PATROL && organisationType != OrganisationType.HOSPITAL && organisationType != OrganisationType.PRIMARY_HEALTH_CARE) {
+            throw new CustomException("Only INDIVIDUAL, TRAFFIC_PATROL, HOSPITAL, PRIMARY HEALTH CARE are allowed.");
         }
 
         List<Ambulance> availableAmbulances = ambulanceRepository.findByAvailabilityStatus(AvailabilityStatus.AVAILABLE);
@@ -40,7 +58,7 @@ public class AmbulanceServiceImpl implements AmbulanceService {
         List<User> availableEmployees = userRepository.findByUserTypeAndAvailabilityStatus(UserType.EMPLOYEE, AvailabilityStatus.AVAILABLE);
 
         if (availableAmbulances.isEmpty() || availableDrivers.isEmpty()) {
-            throw new CustomException("Insufficient resources. Unable to fulfill the request.");
+            throw new CustomException("Inadequate staff. Unable to fulfill the request.");
         }
 
         Random random = new Random();
@@ -53,17 +71,23 @@ public class AmbulanceServiceImpl implements AmbulanceService {
         selectedDriver.setAvailabilityStatus(AvailabilityStatus.NOT_AVAILABLE);
         userRepository.save(selectedDriver);
 
+        String driverName = selectUserName(availableDrivers, random);
         String doctorName = selectUserName(availableDoctors, random);
         String attendeeName = selectUserName(availableAttendees, random);
         String employeeName = selectUserName(availableEmployees, random);
 
         AmbulanceServiceResponse response = new AmbulanceServiceResponse();
         response.setAmbulancePlateNumber(selectedAmbulance.getPlateNumber());
-        response.setDriverNames(getFullName(selectedDriver));
-        response.setDoctorNames(doctorName);
-        response.setAttendeeNames(attendeeName);
-        response.setEmployeeNames(employeeName);
+        response.setDriverName(driverName);
+        response.setDoctorName(doctorName);
+        response.setAttendeeName(attendeeName);
+        response.setEmployeeName(employeeName);
+        response.setLocation(actualLocation);
+        response.setMapUri(mapUri);
         response.setMessage("Ambulance provided successfully!!!");
+
+        createNotification(selectedDriver, "Hello " + driverName + ", You have been assigned to an ambulance service request. Address: " + actualLocation + ". " +
+                "Link: " + mapUri);
 
         return response;
     }
@@ -76,15 +100,12 @@ public class AmbulanceServiceImpl implements AmbulanceService {
         if (userList.isEmpty()) {
             return userList + " not available at the moment!!!";
         }
-
         User selectedUser = userList.get(random.nextInt(userList.size()));
         selectedUser.setAvailabilityStatus(AvailabilityStatus.NOT_AVAILABLE);
         userRepository.save(selectedUser);
+        createNotification(selectedUser, "Hello " + selectedUser.getFirstName() + ", You have been assigned to an ambulance service request.");
 
-        String fullName = getFullName(selectedUser);
-        createNotification(selectedUser, "You have been assigned to an ambulance service request.");
-
-        return fullName;
+        return getFullName(selectedUser);
     }
 
     public String revertUnavailableEntities() {
@@ -145,5 +166,15 @@ public class AmbulanceServiceImpl implements AmbulanceService {
             throw new CustomException("User not found");
         }
         return user;
+    }
+
+    private Organisation getAuthenticatedOrg() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Organisation organisation = organisationRepository.findByEmail(email);
+        if (organisation == null) {
+            throw new CustomException("Organization not found");
+        }
+        return organisation;
     }
 }
